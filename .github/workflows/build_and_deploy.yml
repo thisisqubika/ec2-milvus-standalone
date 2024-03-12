@@ -31,16 +31,19 @@ jobs:
         with:
           terraform_version: "1.0.0"  # Adjust the version as needed
 
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Plan
-        run: terraform plan
+      # Combined step for changing directory, initializing, and planning
+      - name: Initialize and Plan Terraform
+        run: |
+          cd terraform
+          terraform init
+          terraform plan
+        # This ensures the commands run in the right directory
 
       - name: Terraform Apply and Set EC2 IP
         run: |
           terraform apply -auto-approve
           echo "EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)" >> $GITHUB_ENV
+        working-directory: path/to/your/terraform/configs  # Ensure this matches the directory from the previous step
 
       - name: Transfer create-milvus.sh to EC2 instance
         run: |
@@ -49,5 +52,3 @@ jobs:
       - name: Execute create-milvus.sh on EC2 instance
         run: |
           ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH ubuntu@${{ env.EC2_INSTANCE_IP }} "bash /tmp/create-milvus.sh"
-
-
