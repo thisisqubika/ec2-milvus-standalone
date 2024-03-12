@@ -19,6 +19,7 @@ variable "ami" {
 variable "key_name" {
   description = "The name of the EC2 Key Pair"
   type        = string
+  default = "ec2-milvus-standalone"
   # No default provided; should be specified at runtime or via terraform.tfvars for security reasons
 }
 
