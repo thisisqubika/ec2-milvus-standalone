@@ -43,10 +43,9 @@ jobs:
         run: terraform apply -auto-approve tfplan
         working-directory: terraform
 
-      - name: Set EC2 IP
-        run: |
-          echo "EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)" >> $GITHUB_ENV
-        working-directory: terraform
+      - name: Set EC2_INSTANCE_IP environment variable
+        run: echo "EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)" >> $GITHUB_ENV
+      
 
       - name: Transfer create-milvus.sh to EC2 instance
         run: |
