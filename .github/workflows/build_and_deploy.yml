@@ -17,7 +17,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: "us-east-1"  # Adjust as needed
+          aws-region: "us-east-1"
 
       - name: Setup SSH Key
         run: |
@@ -29,22 +29,29 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: "1.0.0"  # Adjust the version as needed
+          terraform_version: "1.0.0"
 
-      # Combined step for changing directory, initializing, and planning
-      - name: Initialize and Plan Terraform
+      - name: Initialize Terraform
         run: |
           cd terraform
           terraform init
-          terraform plan -out=tfplan
-          terraform apply -auto-approve tfplan
-        # This ensures the commands run in the right directory
 
-      - name: Terraform Apply and Set EC2 IP
+      - name: Terraform Plan
+        run: |
+          cd terraform
+          terraform plan -out=tfplan
+        env:
+          TF_VAR_key_name: ${{ secrets.EC2_KEY_PAIR_NAME }}  # Make sure to add this secret in GitHub Secrets
+
+      - name: Terraform Apply
+        run: |
+          cd terraform
+          terraform apply -auto-approve tfplan
+
+      - name: Set EC2 IP
         run: |
           cd terraform
           echo "EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)" >> $GITHUB_ENV
-        # working-directory: path/to/your/terraform/configs  # Ensure this matches the directory from the previous step
 
       - name: Transfer create-milvus.sh to EC2 instance
         run: |
