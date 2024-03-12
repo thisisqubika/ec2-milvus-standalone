@@ -64,7 +64,7 @@ resource "aws_instance" "milvus_instance" {
   instance_type          = var.instance_type
   key_name               = var.key_name
   security_groups        = [aws_security_group.milvus_sg.name]
-  user_data              = file("create-milvus.sh")
+  user_data              = "${file("create-milvus.sh")}"
 
   tags = {
     Name = "MilvusInstance"
