@@ -32,30 +32,26 @@ jobs:
           terraform_version: "1.0.0"
 
       - name: Initialize Terraform
-        run: |
-          cd terraform
-          terraform init
+        run: terraform init
+        working-directory: terraform
 
       - name: Terraform Plan
-        run: |
-          cd terraform
-          terraform plan -out=tfplan
-        env:
-          TF_VAR_key_name: ${{ secrets.EC2_KEY_PAIR_NAME }}  # Make sure to add this secret in GitHub Secrets
+        run: terraform plan -out=tfplan
+        working-directory: terraform
 
       - name: Terraform Apply
-        run: |
-          cd terraform
-          terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve tfplan
+        working-directory: terraform
 
       - name: Set EC2 IP
         run: |
-          cd terraform
           echo "EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)" >> $GITHUB_ENV
+        working-directory: terraform
 
       - name: Transfer create-milvus.sh to EC2 instance
         run: |
           scp -o StrictHostKeyChecking=no -i $SSH_KEY_PATH ./create-milvus.sh ubuntu@${{ env.EC2_INSTANCE_IP }}:/tmp/create-milvus.sh
+        working-directory: terraform
 
       - name: Execute create-milvus.sh on EC2 instance
         run: |
