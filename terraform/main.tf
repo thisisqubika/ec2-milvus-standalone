@@ -1,3 +1,13 @@
+terraform {
+  backend "s3" {
+    bucket  = "ec2-milvus-standalone-state"
+    key     = "terraform.tfstate"
+    encrypt = true
+    region  = "us-east-1"
+  }
+}
+
+
 provider "aws" {
   region = var.region
 }

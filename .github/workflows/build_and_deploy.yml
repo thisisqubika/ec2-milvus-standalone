@@ -36,14 +36,15 @@ jobs:
         run: |
           cd terraform
           terraform init
-          terraform plan
+          terraform plan -out=tfplan
+          terraform apply -auto-approve tfplan
         # This ensures the commands run in the right directory
 
       - name: Terraform Apply and Set EC2 IP
         run: |
-          terraform apply -auto-approve
+          cd terraform
           echo "EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)" >> $GITHUB_ENV
-        working-directory: path/to/your/terraform/configs  # Ensure this matches the directory from the previous step
+        # working-directory: path/to/your/terraform/configs  # Ensure this matches the directory from the previous step
 
       - name: Transfer create-milvus.sh to EC2 instance
         run: |
