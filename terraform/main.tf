@@ -65,6 +65,11 @@ resource "aws_instance" "milvus_instance" {
   key_name               = var.key_name
   security_groups        = [aws_security_group.milvus_sg.name]
   user_data              = file("${path.module}/../create-milvus.sh")
+  
+# tamano de disco
+  root_block_device {
+      volume_size = 30
+  }
 
   #  "${file("create-milvus.sh")}"
 

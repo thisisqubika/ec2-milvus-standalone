@@ -16,6 +16,8 @@ variable "ami" {
   default     = "ami-079db87dc4c10ac91"  # Ensure this is the correct AMI for your region and requirements
 }
 
+# agregar mas tamano de Disc
+
 variable "key_name" {
   description = "The name of the EC2 Key Pair"
   type        = string
