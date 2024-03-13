@@ -31,8 +31,18 @@ jobs:
         with:
           terraform_version: "1.0.0"
 
+      # New Step: Print Terraform Version
+      - name: Print Terraform Version
+        run: terraform version
+        working-directory: terraform
+
       - name: Initialize Terraform
         run: terraform init
+        working-directory: terraform
+
+      # New Step: List Terraform Outputs Before Apply
+      - name: List Terraform Outputs Before Apply
+        run: terraform output
         working-directory: terraform
 
       - name: Terraform Plan
@@ -43,10 +53,16 @@ jobs:
         run: terraform apply -auto-approve tfplan
         working-directory: terraform
 
+      # New Step: List Terraform Outputs After Apply
+      - name: List Terraform Outputs After Apply
+        run: terraform output
+        working-directory: terraform
+
       - name: Set EC2_INSTANCE_IP environment variable
         run: |
           set -x
-          echo "EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)" >> $GITHUB_ENV
+          EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)
+          echo "EC2_INSTANCE_IP=$EC2_INSTANCE_IP" >> $GITHUB_ENV
       
       - name: Transfer create-milvus.sh to EC2 instance
         run: |
@@ -56,3 +72,4 @@ jobs:
       - name: Execute create-milvus.sh on EC2 instance
         run: |
           ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH ubuntu@${{ env.EC2_INSTANCE_IP }} "bash /tmp/create-milvus.sh"
+
