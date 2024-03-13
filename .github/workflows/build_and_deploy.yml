@@ -44,9 +44,10 @@ jobs:
         working-directory: terraform
 
       - name: Set EC2_INSTANCE_IP environment variable
-        run: echo "EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)" >> $GITHUB_ENV
+        run: |
+          set -x
+          echo "EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)" >> $GITHUB_ENV
       
-
       - name: Transfer create-milvus.sh to EC2 instance
         run: |
           scp -o StrictHostKeyChecking=no -i $SSH_KEY_PATH ./create-milvus.sh ubuntu@${{ env.EC2_INSTANCE_IP }}:/tmp/create-milvus.sh
