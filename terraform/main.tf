@@ -24,29 +24,8 @@ resource "aws_security_group" "milvus_sg" {
   }
 
   ingress {
-    from_port   = 2379
-    to_port     = 2379
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 9000
-    to_port     = 9001
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
     from_port   = 19530
     to_port     = 19530
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 9091
-    to_port     = 9091
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
