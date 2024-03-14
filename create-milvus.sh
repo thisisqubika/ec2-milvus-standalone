@@ -1,3 +1,8 @@
+# path to pem private key:
+# /Users/miguelelhaiek/.pems/ec2-milvus-standalone-testing.pem
+
+
+
 #!/bin/bash
 # Update the system
 sudo apt-get update
