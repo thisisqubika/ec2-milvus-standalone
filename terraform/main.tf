@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket  = "ec2-milvus-standalone-state"
+    bucket  = "ec2-milvus-standalone-state-testing"
     key     = "terraform.tfstate"
     encrypt = true
     region  = "us-east-1"
@@ -53,7 +53,7 @@ resource "aws_instance" "milvus_instance" {
   #  "${file("create-milvus.sh")}"
 
   tags = {
-    Name = "Milvus-central-db"
+    Name = "Milvus-central-db-testing"
   }
 }
 
