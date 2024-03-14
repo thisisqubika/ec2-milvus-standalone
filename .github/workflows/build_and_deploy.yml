@@ -3,7 +3,7 @@ name: Terraform Deployment and Post-Configuration
 on:
   push:
     branches:
-      - testing
+      - feature/testing
 
 jobs:
   terraform-deploy:
