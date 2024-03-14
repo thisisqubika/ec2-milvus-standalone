@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 resource "aws_security_group" "milvus_sg_testing" {
-  name        = "milvus-sg"
+  name        = "milvus-sg-testing"
   description = "Security group for Milvus deployment with Docker"
 
   ingress {
