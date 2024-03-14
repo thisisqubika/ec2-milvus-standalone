@@ -53,7 +53,7 @@ resource "aws_instance" "milvus_instance" {
   #  "${file("create-milvus.sh")}"
 
   tags = {
-    Name = "MilvusInstance"
+    Name = "Milvus-central-db"
   }
 }
 
