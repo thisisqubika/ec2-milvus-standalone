@@ -3,7 +3,7 @@ name: Terraform Deployment and Post-Configuration
 on:
   push:
     branches:
-      - main
+      - testing
 
 jobs:
   terraform-deploy:
@@ -19,30 +19,21 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "us-east-1"
 
-      # - name: Setup SSH Key
-      #   run: |
-      #     SSH_KEY_PATH=$(mktemp)
-      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > "$SSH_KEY_PATH"
-      #     chmod 600 "$SSH_KEY_PATH"
-      #     echo "SSH_KEY_PATH=${SSH_KEY_PATH}" >> $GITHUB_ENV
+      - name: Setup SSH Key
+        run: |
+          SSH_KEY_PATH=$(mktemp)
+          echo "${{ secrets.EC2_KEY_PAIR_NAME }}" > "$SSH_KEY_PATH"
+          chmod 600 "$SSH_KEY_PATH"
+          echo "SSH_KEY_PATH=${SSH_KEY_PATH}" >> $GITHUB_ENV
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: "1.0.0"
 
-      # New Step: Print Terraform Version
-      - name: Print Terraform Version
-        run: terraform version
-        working-directory: terraform
 
       - name: Initialize Terraform
         run: terraform init
-        working-directory: terraform
-
-      # New Step: List Terraform Outputs Before Apply
-      - name: List Terraform Outputs Before Apply
-        run: terraform output
         working-directory: terraform
 
       - name: Terraform Plan
@@ -53,11 +44,11 @@ jobs:
         run: terraform apply -auto-approve tfplan
         working-directory: terraform
 
-      # - name: Set EC2_INSTANCE_IP environment variable
-      #   run: |
-      #     set -x
-      #     EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)
-      #     echo "EC2_INSTANCE_IP=$EC2_INSTANCE_IP" >> $GITHUB_ENV
+      - name: Set EC2_INSTANCE_IP environment variable
+        run: |
+          set -x
+          EC2_INSTANCE_IP=$(terraform output -raw ec2_instance_public_ip)
+          echo "EC2_INSTANCE_IP=$EC2_INSTANCE_IP" >> $GITHUB_ENV
       
       # - name: Transfer create-milvus.sh to EC2 instance
       #   run: |
