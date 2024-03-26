@@ -1,3 +1,4 @@
+# enable RBAC 
 common:
   security:
     authorizationEnabled: true

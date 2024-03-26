@@ -1,0 +1,29 @@
+# name: Deploy Milvus on EC2 Instance
+
+# on:
+#   push:
+#     branches:
+#       - feature/testing
+#   workflow_dispatch:
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Deploy to EC2
+#         env:
+#           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+#           HOSTNAME: ${{ secrets.SSH_HOST }}
+#           USERNAME: ${{ secrets.USERNAME }}
+#           PROJECT_DIRECTORY: ${{ secrets.PROJECT_DIRECTORY }}
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         run: |
+#           set -e
+#           echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+#           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} "
+#               ps -ax | grep "[s]treamlit" | awk '{print $1}' | grep '^[0-9]*$' | xargs -r kill -9 &&
+#               sed -i 's|AWS_ACCESS_KEY_ID_PLACEHOLDER|${AWS_ACCESS_KEY_ID}|' start_app.sh &&
+#               sed -i 's|AWS_SECRET_ACCESS_KEY_PLACEHOLDER|${AWS_SECRET_ACCESS_KEY}|' start_app.sh &&
+#               ./start_app.sh
+#               "
